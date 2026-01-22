@@ -1,0 +1,19 @@
+{
+  "name": "propio-os-architecture",
+  "version": "2.0.0",
+  "description": "PROPIO OS - Plataforma Multi-Producto de Crédito Alternativo",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "fintech",
+    "credit",
+    "alternative-data",
+    "fides",
+    "propio"
+  ],
+  "author": "PROPIO",
+  "license": "MIT"
+}
