@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PROPIO OS - Plataforma Multi-Producto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const Icon = ({ name, className = "w-5 h-5" }) => {
+      const icons = {
+        layers: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>,
+        eye: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>,
+        fingerprint: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 12C2 6.5 6.5 2 12 2a10 10 0 0 1 8 4"/><path d="M5 19.5C5.5 18 6 15 6 12c0-.7.12-1.37.34-2"/><path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/></svg>,
+        package: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>,
+        brain: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg>,
+        shield: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>,
+        calendar: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
+        sparkles: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/></svg>,
+        check: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>,
+        arrowRight: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
+        arrowDown: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>,
+        home: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+        wallet: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>,
+        creditCard: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>,
+        briefcase: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+        activity: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>,
+        lineChart: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>,
+        users: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>,
+        trendingUp: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>,
+        alert: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>,
+        lock: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+        key: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/></svg>,
+        monitor: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>,
+        workflow: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>,
+        bell: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/></svg>,
+        book: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+        server: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="8" x="2" y="2" rx="2"/><rect width="20" height="8" x="2" y="14" rx="2"/></svg>,
+        globe: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>,
+        userCog: <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="15" r="3"/><circle cx="9" cy="7" r="4"/><path d="M10 15H6a4 4 0 0 0-4 4v2"/></svg>,
+      };
+      return icons[name] || null;
+    };
+
+    function App() {
+      const [activeLayer, setActiveLayer] = useState('overview');
+      const [activePhase, setActivePhase] = useState(1);
+
+      const layers = [
+        { id: 'overview', name: 'Vista General', icon: 'eye' },
+        { id: 'fides', name: 'FIDES', icon: 'fingerprint', hl: true },
+        { id: 'products', name: 'Productos', icon: 'package' },
+        { id: 'engines', name: 'Motores', icon: 'brain' },
+        { id: 'security', name: 'Seguridad', icon: 'shield', hl: true },
+        { id: 'roadmap', name: 'Roadmap', icon: 'calendar' },
+      ];
+
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-100 font-mono">
+          <header className="border-b border-cyan-500/30 bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50">
+            <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-violet-600 rounded-lg flex items-center justify-center">
+                  <Icon name="layers" className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold"><span className="text-cyan-400">PROPIO</span><span className="text-slate-400 ml-2">OS</span></h1>
+                  <p className="text-xs text-slate-500">Plataforma Multi-Producto de Crédito Alternativo</p>
+                </div>
+              </div>
+              <div className="flex gap-3 text-xs">
+                <span className="px-2 py-1 bg-violet-500/20 text-violet-400 rounded border border-violet-500/30">MULTI-PRODUCTO</span>
+                <span className="px-2 py-1 bg-emerald-500/20 text-emerald-400 rounded">v2.0</span>
+              </div>
+            </div>
+          </header>
+
+          <nav className="border-b border-slate-800 bg-slate-900/50">
+            <div className="max-w-7xl mx-auto px-6 flex gap-1 py-2">
+              {layers.map((l) => (
+                <button key={l.id} onClick={() => setActiveLayer(l.id)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${activeLayer === l.id ? (l.hl ? 'bg-violet-500/20 text-violet-400 border border-violet-500/40' : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40') : 'text-slate-400 hover:bg-slate-800'}`}>
+                  <Icon name={l.icon} className="w-4 h-4" />{l.name}
+                  {l.hl && <Icon name="sparkles" className="w-3 h-3" />}
+                </button>
+              ))}
+            </div>
+          </nav>
+
+          <main className="max-w-7xl mx-auto px-6 py-8">
+            {activeLayer === 'overview' && <Overview />}
+            {activeLayer === 'fides' && <Fides />}
+            {activeLayer === 'products' && <Products />}
+            {activeLayer === 'engines' && <Engines />}
+            {activeLayer === 'security' && <Security />}
+            {activeLayer === 'roadmap' && <Roadmap phase={activePhase} setPhase={setActivePhase} />}
+          </main>
+        </div>
+      );
+    }
+
+    function Overview() {
+      return (
+        <div className="space-y-8">
+          <div className="text-center py-6">
+            <h2 className="text-3xl font-bold"><span className="text-cyan-400">PROPIO OS</span><span className="text-slate-400 ml-2">— Crédito Alternativo</span></h2>
+            <p className="text-slate-400 max-w-2xl mx-auto mt-2">Plataforma modular. Diferenciador: <span className="text-violet-400 font-semibold">FIDES</span> — data alternativa.</p>
+          </div>
+          <div className="grid grid-cols-3 gap-6">
+            <Card icon="fingerprint" title="FIDES" color="violet" desc="Data alternativa + RBI Score" />
+            <Card icon="brain" title="Risk Engine" color="cyan" desc="Motor agnóstico al producto" />
+            <Card icon="package" title="Multi-Producto" color="emerald" desc="R2O hoy, más mañana" />
+          </div>
+          <div className="bg-gradient-to-r from-violet-500/10 to-cyan-500/10 rounded-xl border border-violet-500/30 p-6">
+            <h3 className="text-lg font-bold text-white mb-2">Tesis Central</h3>
+            <p className="text-slate-300">Rent-to-Own es el <span className="text-cyan-400">primer caso de uso</span>. FIDES + RBI es el <span className="text-violet-400">moat</span>.</p>
+          </div>
+          <div className="grid grid-cols-5 gap-4">
+            <Stat n="5+" l="Productos" c="emerald" />
+            <Stat n="3" l="Scores" c="violet" />
+            <Stat n="5" l="State Machines" c="cyan" />
+            <Stat n="45+" l="Alertas" c="rose" />
+            <Stat n="$213M" l="Inversión" c="amber" />
+          </div>
+        </div>
+      );
+    }
+
+    function Fides() {
+      return (
+        <div className="space-y-8">
+          <div className="bg-gradient-to-br from-violet-500/10 to-purple-500/5 rounded-2xl border border-violet-500/30 p-8 flex items-start gap-4">
+            <Icon name="fingerprint" className="w-12 h-12 text-violet-400" />
+            <div>
+              <h2 className="text-3xl font-bold text-violet-400">FIDES</h2>
+              <p className="text-slate-400">Financial Identity & Data Enrichment System</p>
+              <p className="text-slate-300 mt-4">El activo estratégico para underwriting alternativo.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-6">
+            <div className="bg-slate-900/50 rounded-xl border border-red-500/30 p-6">
+              <h3 className="text-red-400 font-semibold mb-4 flex items-center gap-2"><Icon name="alert" className="w-5 h-5" />Problema Tradicional</h3>
+              {['Depende de bureaus','Excluye gig economy','Scoring estático','~40% sin crédito'].map((t,i)=><p key={i} className="text-slate-400 text-sm flex gap-2"><span className="text-red-400">✗</span>{t}</p>)}
+            </div>
+            <div className="bg-slate-900/50 rounded-xl border border-emerald-500/30 p-6">
+              <h3 className="text-emerald-400 font-semibold mb-4 flex items-center gap-2"><Icon name="sparkles" className="w-5 h-5" />Solución FIDES</h3>
+              {['Historial arriendo','Data gig economy','RBI Score conductual','Rent Reporting'].map((t,i)=><p key={i} className="text-slate-300 text-sm flex gap-2"><span className="text-emerald-400">✓</span>{t}</p>)}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-6">
+            <FCard icon="activity" title="Behavioral Data" badge="DEV" items={['Historial pagos','Patrones','Timing']} />
+            <FCard icon="lineChart" title="RBI Score" badge="PRIORITY" items={['Consistency 40%','Timing 25%','Stability 15%']} />
+            <FCard icon="users" title="Identity Graph" badge="PLANNED" items={['Consolidación','Cross-producto','Evolutivo']} />
+          </div>
+        </div>
+      );
+    }
+
+    function Products() {
+      const [a, setA] = useState('r2o');
+      const ps = [
+        {id:'r2o',name:'Rent-to-Own',icon:'home',badge:'LIVE',desc:'Arriendo con opción',m:{AUM:'$2.5B',Clientes:'150+'}},
+        {id:'consumo',name:'Crédito',icon:'wallet',badge:'PLANNED',desc:'Préstamos',m:{Ticket:'50-200 UF'}},
+        {id:'gig',name:'Gig Finance',icon:'briefcase',badge:'RESEARCH',desc:'Independientes',m:{Target:'Gig workers'}},
+      ];
+      const p = ps.find(x=>x.id===a);
+      return (
+        <div className="space-y-8">
+          <h2 className="text-2xl font-bold text-white">Productos</h2>
+          <div className="flex gap-3">
+            {ps.map(pr=>(
+              <button key={pr.id} onClick={()=>setA(pr.id)} className={`flex items-center gap-2 px-4 py-3 rounded-lg border ${a===pr.id?'bg-cyan-500/20 border-cyan-500/50 text-cyan-400':'bg-slate-900/50 border-slate-800 text-slate-400'}`}>
+                <Icon name={pr.icon} className="w-5 h-5" />{pr.name}<Badge s={pr.badge} />
+              </button>
+            ))}
+          </div>
+          {p && <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center"><Icon name={p.icon} className="w-6 h-6 text-cyan-400" /></div>
+              <div><h3 className="text-xl font-bold text-white">{p.name}</h3><p className="text-slate-400">{p.desc}</p></div>
+            </div>
+            <div className="flex gap-4">{Object.entries(p.m).map(([k,v])=><div key={k} className="bg-slate-800/50 rounded-lg p-3"><span className="text-slate-500 text-xs">{k}</span><p className="text-white font-bold">{v}</p></div>)}</div>
+          </div>}
+        </div>
+      );
+    }
+
+    function Engines() {
+      return (
+        <div className="space-y-8">
+          <h2 className="text-2xl font-bold text-white">Risk Engine</h2>
+          <div className="bg-slate-900/50 rounded-2xl border border-cyan-500/30 p-8">
+            <div className="flex items-center gap-4 mb-8">
+              {[{n:'1',t:'Input'},{n:'2',t:'Scoring'},{n:'3',t:'Matriz'},{n:'4',t:'Output'}].map((s,i,arr)=>(
+                <React.Fragment key={s.n}>
+                  <div className="flex-1 bg-slate-800/50 rounded-lg p-4 border border-slate-700 text-center">
+                    <span className="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 inline-flex items-center justify-center font-bold">{s.n}</span>
+                    <p className="text-white mt-2">{s.t}</p>
+                  </div>
+                  {i<arr.length-1 && <Icon name="arrowRight" className="w-5 h-5 text-cyan-500/50" />}
+                </React.Fragment>
+              ))}
+            </div>
+            <div className="grid grid-cols-3 gap-6">
+              <Score title="Credit Score" range="500-999" color="cyan" items={['Sinacofi 40%','CMF 25%','Carga 20%']} />
+              <Score title="Asset Score" range="0-1000" color="emerald" items={['Ubicación 35%','Liquidez 30%','Calidad 20%']} />
+              <Score title="RBI Score" range="0-100" color="violet" hl items={['Consistency 40%','Timing 25%','Priority 20%']} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Security() {
+      const ps = [
+        {icon:'book',t:'Gobierno',c:'cyan',items:['Política General','Comité Riesgos']},
+        {icon:'alert',t:'Riesgos',c:'amber',items:['ISO 27005','7 Categorías']},
+        {icon:'lock',t:'Cifrado',c:'violet',items:['AES-256','TLS 1.2+']},
+        {icon:'userCog',t:'Acceso',c:'emerald',items:['Privilegio mínimo','Revisiones']},
+        {icon:'server',t:'Ambientes',c:'blue',items:['K8s separados','Dev ≠ Prod']},
+        {icon:'monitor',t:'Monitoreo',c:'rose',items:['IDS/IPS','30% ISO']},
+        {icon:'users',t:'Awareness',c:'orange',items:['Programa 2025','Phishing']},
+        {icon:'globe',t:'Proveedores',c:'teal',items:['MSA 5 años','72h incidentes']},
+      ];
+      return (
+        <div className="space-y-8">
+          <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/5 rounded-2xl border border-emerald-500/30 p-8 flex items-start gap-4">
+            <Icon name="shield" className="w-12 h-12 text-emerald-400" />
+            <div>
+              <h2 className="text-3xl font-bold text-emerald-400">Ciberseguridad</h2>
+              <p className="text-slate-400">ISO 27001 — Meta Q4-2026</p>
+              <p className="text-slate-300 mt-2">21 políticas, 8 pilares.</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-5 gap-4">
+            <Stat n="21" l="Políticas" c="emerald" />
+            <Stat n="8" l="Pilares" c="cyan" />
+            <Stat n="30%" l="ISO" c="violet" />
+            <Stat n="7" l="Categorías" c="amber" />
+            <Stat n="Q4-26" l="Meta" c="rose" />
+          </div>
+          <div className="grid grid-cols-4 gap-4">
+            {ps.map((p,i)=><Pillar key={i} {...p} />)}
+          </div>
+        </div>
+      );
+    }
+
+    function Roadmap({phase, setPhase}) {
+      const ps = [
+        {n:1,name:'Fundación',q:'Q1',b:'$43M',items:['Data Layer','Risk Engine','FIDES MVP']},
+        {n:2,name:'Core Ops',q:'Q2',b:'$50M',items:['Originación','Cobranza','RBI v1']},
+        {n:3,name:'Inteligencia',q:'Q3',b:'$60M',items:['AI Underwriting','Identity Graph']},
+        {n:4,name:'Escala',q:'Q4',b:'$60M',items:['Multi-Producto','Crédito Consumo']},
+      ];
+      const p = ps[phase-1];
+      return (
+        <div className="space-y-8">
+          <h2 className="text-2xl font-bold text-white">Roadmap 2025</h2>
+          <div className="relative">
+            <div className="absolute top-6 left-0 right-0 h-1 bg-slate-800 rounded-full"></div>
+            <div className="grid grid-cols-4 gap-4 relative">
+              {ps.map((ph)=>(
+                <div key={ph.n} onClick={()=>setPhase(ph.n)} className={`pt-10 cursor-pointer ${phase===ph.n?'scale-105':'opacity-70 hover:opacity-100'}`}>
+                  <div className={`absolute top-4 w-4 h-4 rounded-full border-2 ${phase===ph.n?'bg-cyan-500 border-cyan-400':'bg-slate-700 border-slate-600'}`} style={{left:`${(ph.n-1)*25+12.5}%`}}></div>
+                  <div className={`rounded-xl border p-4 ${phase===ph.n?'bg-cyan-500/10 border-cyan-500/50':'bg-slate-900/50 border-slate-800'}`}>
+                    <div className="flex justify-between text-xs mb-2"><span className={phase===ph.n?'text-cyan-400':'text-slate-500'}>{ph.q} 2025</span><span className="text-slate-500">{ph.b}</span></div>
+                    <h4 className={`font-bold ${phase===ph.n?'text-cyan-400':'text-white'}`}>F{ph.n}: {ph.name}</h4>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-slate-900/50 rounded-xl border border-slate-800 p-6">
+            <h3 className="text-xl font-bold text-white mb-4">Fase {p.n}: {p.name}</h3>
+            <div className="grid grid-cols-2 gap-6">
+              <div>{p.items.map((it,i)=><p key={i} className="flex items-center gap-2 text-slate-300"><Icon name="check" className="w-4 h-4 text-cyan-500" />{it}</p>)}</div>
+              <div><p className="text-slate-500 text-sm">Presupuesto</p><p className="text-3xl font-bold text-cyan-400">{p.b} CLP</p></div>
+            </div>
+          </div>
+          <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-xl border border-cyan-500/30 p-6 flex justify-between items-center">
+            <div><h3 className="text-lg font-semibold text-white">Total 2025</h3></div>
+            <div className="text-right"><p className="text-3xl font-bold text-cyan-400">$213M CLP</p><p className="text-slate-400">~$223K USD</p></div>
+          </div>
+        </div>
+      );
+    }
+
+    // Helpers
+    function Card({icon,title,color,desc}) {
+      const c = {violet:'border-violet-500/30 text-violet-400',cyan:'border-cyan-500/30 text-cyan-400',emerald:'border-emerald-500/30 text-emerald-400'};
+      return <div className={`bg-slate-900/50 rounded-xl border ${c[color].split(' ')[0]} p-6`}><Icon name={icon} className={`w-8 h-8 ${c[color].split(' ')[1]} mb-3`} /><h3 className={`text-lg font-bold ${c[color].split(' ')[1]}`}>{title}</h3><p className="text-sm text-slate-400 mt-2">{desc}</p></div>;
+    }
+
+    function Stat({n,l,c}) {
+      const cs = {emerald:'text-emerald-400 border-emerald-500/30',violet:'text-violet-400 border-violet-500/30',cyan:'text-cyan-400 border-cyan-500/30',rose:'text-rose-400 border-rose-500/30',amber:'text-amber-400 border-amber-500/30'};
+      return <div className={`bg-slate-900/50 rounded-xl border ${cs[c].split(' ')[1]} p-4 text-center`}><p className={`text-2xl font-bold ${cs[c].split(' ')[0]}`}>{n}</p><p className="text-xs text-slate-400">{l}</p></div>;
+    }
+
+    function Badge({s}) {
+      const st = {LIVE:'bg-emerald-500/20 text-emerald-400',DEV:'bg-amber-500/20 text-amber-400',PLANNED:'bg-slate-500/20 text-slate-400',RESEARCH:'bg-blue-500/20 text-blue-400',PRIORITY:'bg-violet-500/20 text-violet-400'};
+      return <span className={`px-2 py-0.5 rounded text-xs ${st[s]||st.PLANNED}`}>{s}</span>;
+    }
+
+    function FCard({icon,title,badge,items}) {
+      return <div className="bg-slate-800/50 rounded-xl border border-violet-500/20 p-5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3"><div className="w-10 h-10 bg-violet-500/20 rounded-lg flex items-center justify-center"><Icon name={icon} className="w-5 h-5 text-violet-400" /></div><h4 className="font-semibold text-white">{title}</h4></div>
+          <Badge s={badge} />
+        </div>
+        {items.map((it,i)=><p key={i} className="text-sm text-slate-300 flex items-center gap-2"><Icon name="check" className="w-3 h-3 text-violet-400" />{it}</p>)}
+      </div>;
+    }
+
+    function Score({title,range,color,items,hl}) {
+      const c = {cyan:'border-cyan-500/30 text-cyan-400',emerald:'border-emerald-500/30 text-emerald-400',violet:'border-violet-500/30 text-violet-400'};
+      return <div className={`rounded-lg border ${c[color].split(' ')[0]} p-4 ${hl?'ring-2 ring-violet-500/50':''}`}>
+        <div className="flex justify-between mb-3"><h4 className={`font-semibold ${c[color].split(' ')[1]}`}>{title}</h4><span className="text-xs text-slate-500">{range}</span></div>
+        {items.map((it,i)=><p key={i} className="text-sm text-slate-300">{it}</p>)}
+        {hl && <p className="text-xs text-violet-400 mt-3 pt-3 border-t border-violet-500/30 flex items-center gap-1"><Icon name="sparkles" className="w-3 h-3" />Diferenciador</p>}
+      </div>;
+    }
+
+    function Pillar({icon,t,c,items}) {
+      const cs = {cyan:'border-cyan-500/30 text-cyan-400 bg-cyan-500/20',amber:'border-amber-500/30 text-amber-400 bg-amber-500/20',violet:'border-violet-500/30 text-violet-400 bg-violet-500/20',emerald:'border-emerald-500/30 text-emerald-400 bg-emerald-500/20',blue:'border-blue-500/30 text-blue-400 bg-blue-500/20',rose:'border-rose-500/30 text-rose-400 bg-rose-500/20',orange:'border-orange-500/30 text-orange-400 bg-orange-500/20',teal:'border-teal-500/30 text-teal-400 bg-teal-500/20'};
+      return <div className={`rounded-xl border ${cs[c].split(' ')[0]} p-4`}>
+        <div className="flex items-center gap-2 mb-3"><div className={`w-8 h-8 ${cs[c].split(' ')[2]} rounded-lg flex items-center justify-center`}><Icon name={icon} className={`w-4 h-4 ${cs[c].split(' ')[1]}`} /></div><h4 className={`font-bold text-sm ${cs[c].split(' ')[1]}`}>{t}</h4></div>
+        {items.map((it,i)=><p key={i} className="text-xs text-slate-400">{it}</p>)}
+      </div>;
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
